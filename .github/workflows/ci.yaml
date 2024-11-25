@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.1.1
+      - run: deno fmt --check
+      - run: deno lint
+      - run: deno test --allow-all --coverage=cov/
+      - run: deno coverage --lcov cov/ > cov.lcov
